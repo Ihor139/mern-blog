@@ -4,8 +4,7 @@ import { validationResult } from "express-validator";
 
 import UserModel from "../models/User.js";
 
-/** авторизация пользователя  */
-
+/** 5.2 авторизация пользователя  */
 export const login = async (req, res) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
@@ -46,8 +45,7 @@ export const login = async (req, res) => {
   }
 };
 
-/** регистрация нового пользователя */
-
+/** 4.2 регистрация нового пользователя */
 export const register = async (req, res) => {
   /** обработаем ошибки в try catch */
   try {
@@ -98,8 +96,7 @@ export const register = async (req, res) => {
   }
 };
 
-/** получение информации о себе */
-
+/** 6.2 получение информации о себе */
 export const getMe = async (req, res) => {
   /** обработаем ошибки в try catch */
   try {

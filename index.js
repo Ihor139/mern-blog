@@ -11,8 +11,9 @@ import {
 
 import * as UserController from "./controllers/UserController.js";
 import * as PostController from "./controllers/PostController.js";
+import {remove} from "./controllers/PostController.js";
 
-/** подключение к базе данных */
+/** 3 подключение к базе данных */
 mongoose.connect("mongodb+srv://admin:qqqwww@cluster0.nymgd.mongodb.net/blog?retryWrites=true&w=majority")
   .then(() => {
     console.log("db ok");
@@ -21,14 +22,12 @@ mongoose.connect("mongodb+srv://admin:qqqwww@cluster0.nymgd.mongodb.net/blog?ret
     console.log("db error: " + err);
   });
 
-/** создание приложения app express */
-
+/** 1 создание приложения app express */
 const app = express();
 
 app.use(express.json());
 
-/** установка слушателя порта */
-
+/** 2 установка слушателя порта */
 app.listen(4444, (err) => {
   if (err) return console.log(err);
 
@@ -39,18 +38,19 @@ app.listen(4444, (err) => {
 
 /** роуты для авторизации */
 
-/** авторизация пользователя  */
+/** 5 авторизация пользователя  */
 app.post("/login", loginValidation, UserController.login);
 
-/** регистрация нового пользователя */
+/** 4 регистрация нового пользователя */
 app.post("/register", registerValidation, UserController.register);
 
-/** получение информации о себе */
+/** 6 получение информации о себе */
 app.get("/me", checkAuth, UserController.getMe);
 
-/** роуты для статтей */
-// app.get("/posts", PostController.getAll);
-// app.get("/posts/:id", PostController.getOne);
-// app.post("/posts", PostController.create);
-// app.delete("/posts", PostController.remove);
-// app.patch("/posts", PostController.update);
+
+/** 7 роуты для статтей */
+app.get("/posts", PostController.getAll);
+app.get("/posts/:id", PostController.getOne);
+app.post("/posts", checkAuth, postCreateValidation, PostController.create);
+app.patch("/posts/:id", checkAuth, PostController.update);
+app.delete("/posts/:id", checkAuth, PostController.remove);
